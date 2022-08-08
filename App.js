@@ -1,29 +1,39 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
 
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
 export default function App() {
+  const [modalIsVisible, setModalIsVisible] = useState(false)
   const [courseGoals, setCourseGoals] = useState([]);
   console.log(courseGoals)
 
+
   function addGoalsHandler(text) {
+  if(text !== ""){
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { goal: text, key: new Date().getTime().toLocaleString() },
     ]);
   }
+  }
+
+  function startAddGoalHandler() {
+    setModalIsVisible(true)
+  }
+
 
   function deleteGoalHandler(id) {
     setCourseGoals((currentCourseGoals) => {
-      return currentCourseGoals.filter((goal) => goal.id !== id);
+      return currentCourseGoals.filter((goal) => goal.key !== id);
     });
   }
 
   return (
     <View style={styles.appContainer}>
-      <GoalInput onAddGoal={addGoalsHandler} />
+      <Button title="Add New Goal"  color="#5e0acc" onPress={startAddGoalHandler}/>
+      <GoalInput onAddGoal={addGoalsHandler} visible={modalIsVisible}/>
       <View style={styles.goalsContainer}>
         {/* FlatList is used when a list is very long but ScrollView is used when it's not long*/}
         <FlatList
