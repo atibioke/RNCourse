@@ -6,6 +6,7 @@ import GoalInput from "./components/GoalInput";
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
+  console.log(courseGoals)
 
   function addGoalsHandler(text) {
     setCourseGoals((currentCourseGoals) => [
@@ -14,9 +15,11 @@ export default function App() {
     ]);
   }
 
-function deleteGoalHandler(){
-  console.log("delete");
-}
+  function deleteGoalHandler(id) {
+    setCourseGoals((currentCourseGoals) => {
+      return currentCourseGoals.filter((goal) => goal.id !== id);
+    });
+  }
 
   return (
     <View style={styles.appContainer}>
@@ -26,7 +29,13 @@ function deleteGoalHandler(){
         <FlatList
           data={courseGoals}
           renderItem={(itemData) => {
-            return <GoalItem text={itemData.item.goal} onDeleteItem={deleteGoalHandler}/>;
+            return (
+              <GoalItem
+                text={itemData.item.goal}
+                id={itemData.item.key}
+                onDeleteItem={deleteGoalHandler}
+              />
+            );
           }}
           alwaysBounceVertical={false}
         />
@@ -35,7 +44,7 @@ function deleteGoalHandler(){
   );
 }
 
-const styles = StyleSheet.create({    
+const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     paddingTop: 50,
